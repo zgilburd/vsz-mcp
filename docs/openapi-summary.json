@@ -1,0 +1,618 @@
+{
+  "info": {
+    "description": "This reference guide describes the public APIs supported by the Virtual SmartZone - Essentials 7.1.1. Use the RESTful API commands described in this guide as an alternative way to manage the controller and its managed APs (in addition to the web and command line interfaces). ",
+    "version": "v13_1",
+    "title": "Virtual SmartZone - Essentials"
+  },
+  "basePath": "/wsg/api/public/v13_1",
+  "totalPaths": 688,
+  "totalOperations": 1068,
+  "totalTags": 114,
+  "totalDefinitions": 936,
+  "toolMapping": {
+    "vsz_ap": [
+      "Access Point APP",
+      "Access Point Configuration",
+      "Access Point Operational",
+      "AP External Syslog Server Profile",
+      "AP Group",
+      "AP Registration Rules",
+      "AP SNMP Agent Profile"
+    ],
+    "vsz_security": [
+      "Account Security",
+      "Allowed Device Profile",
+      "Application Visibility Control",
+      "Device Policy",
+      "Device Policy in Domain Level",
+      "Firewall Profile",
+      "Geofence Profile",
+      "L2 Access Control",
+      "L2 Access Control in Domain Level",
+      "L3 Access Control Policy",
+      "Mark Rogue",
+      "Restricted AP Access Profile",
+      "Rogue Classification Policy",
+      "Signature Based Profile"
+    ],
+    "vsz_auth_services": [
+      "Accounting Service",
+      "Authentication Profile",
+      "Authentication Service",
+      "Test AAA Server",
+      "Vendor Specific Attribute Profile",
+      "Web Authentication"
+    ],
+    "vsz_system": [
+      "Administration",
+      "Application Log And Status",
+      "FtpServerSettings",
+      "GDPR",
+      "Global reference",
+      "LWAPP TO SCG",
+      "Northbound Data Streaming",
+      "SCI",
+      "SNMP Agent",
+      "Syslog Server",
+      "System",
+      "ZDImport"
+    ],
+    "vsz_client": [
+      "Block Client",
+      "Client Isolation Whitelist",
+      "Rogue Client",
+      "Wired Client",
+      "Wireless Client"
+    ],
+    "vsz_network": [
+      "Bond Port Profile",
+      "Bonjour Fencing Policy",
+      "Bonjour Gateway Policies",
+      "Bridge",
+      "Control Planes",
+      "Data Plane Operational",
+      "DHCP",
+      "DiffServ",
+      "DNS Server Management",
+      "DNS Spoofing Profile",
+      "DP DHCP & NAT Profile",
+      "DP DHCP Profile",
+      "DP Group",
+      "DP NAT Profile",
+      "DP Network",
+      "Ethernet Port Profile",
+      "Flexi-VPN",
+      "IPSEC Profile",
+      "L3 Roaming",
+      "Multicast Forwarding",
+      "Network Segmentation Profile",
+      "Precedence Profile",
+      "RuckusGRE Tunnel Profile",
+      "SoftGRE Tunnel Profile",
+      "Split Tunnel Profile",
+      "SystemIPsec",
+      "VDP Profile",
+      "VLAN Name Profile",
+      "VlanPooling"
+    ],
+    "vsz_certificate": [
+      "Certificate",
+      "Dynamic PSK"
+    ],
+    "vsz_backup": [
+      "Cluster Management"
+    ],
+    "vsz_monitoring": [
+      "Connectivity Tools",
+      "Event and Alarm",
+      "Event Management Setting",
+      "Switch Event Management Setting",
+      "Traffic Class Profile",
+      "User Traffic Profile"
+    ],
+    "vsz_zones": [
+      "Domain",
+      "Ruckus Wireless AP Zone",
+      "Zone AAA",
+      "Zone Schedule Upgrade",
+      "Zone Switch Group Link"
+    ],
+    "vsz_hotspot": [
+      "Guest Access",
+      "Hotspot 2.0 Wi-Fi Operator Profile",
+      "Hotspot Service",
+      "Hotspot20 Venue Service",
+      "Portal Detection and Suppression Profile",
+      "SMS Gateway",
+      "Social Media Login Profile",
+      "Wechat"
+    ],
+    "vsz_identity": [
+      "Hotspot 2.0 Identity Provider Profile",
+      "Identity Guest Pass",
+      "Identity Subscription Package",
+      "Identity User",
+      "Identity User Role",
+      "SCG User",
+      "SCG User Group"
+    ],
+    "vsz_wlan": [
+      "Hotspot20 WLAN Service",
+      "Wi-Fi Calling Policy",
+      "WLAN",
+      "WLAN Group",
+      "WLAN Scheduler"
+    ],
+    "vsz_indoor_map": [
+      "IndoorMap",
+      "LBS profile",
+      "Real Time Location Service Profile"
+    ],
+    "vsz_query": [
+      "Query With Filter",
+      "URL Filtering Policy"
+    ],
+    "vsz_internal_auth": [
+      "Service Ticket",
+      "Session Management"
+    ]
+  },
+  "tags": [
+    {
+      "tag": "Access Point APP",
+      "count": 4
+    },
+    {
+      "tag": "Access Point Configuration",
+      "count": 83
+    },
+    {
+      "tag": "Access Point Operational",
+      "count": 16
+    },
+    {
+      "tag": "Account Security",
+      "count": 7
+    },
+    {
+      "tag": "Accounting Service",
+      "count": 13
+    },
+    {
+      "tag": "Administration",
+      "count": 13
+    },
+    {
+      "tag": "Allowed Device Profile",
+      "count": 6
+    },
+    {
+      "tag": "AP External Syslog Server Profile",
+      "count": 6
+    },
+    {
+      "tag": "AP Group",
+      "count": 79
+    },
+    {
+      "tag": "AP Registration Rules",
+      "count": 7
+    },
+    {
+      "tag": "AP SNMP Agent Profile",
+      "count": 6
+    },
+    {
+      "tag": "Application Log And Status",
+      "count": 4
+    },
+    {
+      "tag": "Application Visibility Control",
+      "count": 32
+    },
+    {
+      "tag": "Authentication Profile",
+      "count": 1
+    },
+    {
+      "tag": "Authentication Service",
+      "count": 28
+    },
+    {
+      "tag": "Block Client",
+      "count": 10
+    },
+    {
+      "tag": "Bond Port Profile",
+      "count": 7
+    },
+    {
+      "tag": "Bonjour Fencing Policy",
+      "count": 8
+    },
+    {
+      "tag": "Bonjour Gateway Policies",
+      "count": 7
+    },
+    {
+      "tag": "Bridge",
+      "count": 3
+    },
+    {
+      "tag": "Certificate",
+      "count": 22
+    },
+    {
+      "tag": "Client Isolation Whitelist",
+      "count": 7
+    },
+    {
+      "tag": "Cluster Management",
+      "count": 26
+    },
+    {
+      "tag": "Connectivity Tools",
+      "count": 6
+    },
+    {
+      "tag": "Control Planes",
+      "count": 10
+    },
+    {
+      "tag": "Data Plane Operational",
+      "count": 1
+    },
+    {
+      "tag": "Device Policy",
+      "count": 6
+    },
+    {
+      "tag": "Device Policy in Domain Level",
+      "count": 7
+    },
+    {
+      "tag": "DHCP",
+      "count": 13
+    },
+    {
+      "tag": "DiffServ",
+      "count": 6
+    },
+    {
+      "tag": "DNS Server Management",
+      "count": 8
+    },
+    {
+      "tag": "DNS Spoofing Profile",
+      "count": 6
+    },
+    {
+      "tag": "Domain",
+      "count": 4
+    },
+    {
+      "tag": "DP DHCP & NAT Profile",
+      "count": 6
+    },
+    {
+      "tag": "DP DHCP Profile",
+      "count": 24
+    },
+    {
+      "tag": "DP Group",
+      "count": 5
+    },
+    {
+      "tag": "DP NAT Profile",
+      "count": 12
+    },
+    {
+      "tag": "DP Network",
+      "count": 6
+    },
+    {
+      "tag": "Dynamic PSK",
+      "count": 12
+    },
+    {
+      "tag": "Ethernet Port Profile",
+      "count": 7
+    },
+    {
+      "tag": "Event and Alarm",
+      "count": 8
+    },
+    {
+      "tag": "Event Management Setting",
+      "count": 4
+    },
+    {
+      "tag": "Firewall Profile",
+      "count": 9
+    },
+    {
+      "tag": "Flexi-VPN",
+      "count": 2
+    },
+    {
+      "tag": "FtpServerSettings",
+      "count": 8
+    },
+    {
+      "tag": "GDPR",
+      "count": 1
+    },
+    {
+      "tag": "Geofence Profile",
+      "count": 6
+    },
+    {
+      "tag": "Global reference",
+      "count": 2
+    },
+    {
+      "tag": "Guest Access",
+      "count": 8
+    },
+    {
+      "tag": "Hotspot 2.0 Identity Provider Profile",
+      "count": 9
+    },
+    {
+      "tag": "Hotspot 2.0 Wi-Fi Operator Profile",
+      "count": 9
+    },
+    {
+      "tag": "Hotspot Service",
+      "count": 11
+    },
+    {
+      "tag": "Hotspot20 Venue Service",
+      "count": 6
+    },
+    {
+      "tag": "Hotspot20 WLAN Service",
+      "count": 6
+    },
+    {
+      "tag": "Identity Guest Pass",
+      "count": 8
+    },
+    {
+      "tag": "Identity Subscription Package",
+      "count": 7
+    },
+    {
+      "tag": "Identity User",
+      "count": 10
+    },
+    {
+      "tag": "Identity User Role",
+      "count": 7
+    },
+    {
+      "tag": "IndoorMap",
+      "count": 7
+    },
+    {
+      "tag": "IPSEC Profile",
+      "count": 7
+    },
+    {
+      "tag": "L2 Access Control",
+      "count": 6
+    },
+    {
+      "tag": "L2 Access Control in Domain Level",
+      "count": 7
+    },
+    {
+      "tag": "L3 Access Control Policy",
+      "count": 7
+    },
+    {
+      "tag": "L3 Roaming",
+      "count": 2
+    },
+    {
+      "tag": "LBS profile",
+      "count": 6
+    },
+    {
+      "tag": "LWAPP TO SCG",
+      "count": 3
+    },
+    {
+      "tag": "Mark Rogue",
+      "count": 6
+    },
+    {
+      "tag": "Multicast Forwarding",
+      "count": 2
+    },
+    {
+      "tag": "Network Segmentation Profile",
+      "count": 11
+    },
+    {
+      "tag": "Northbound Data Streaming",
+      "count": 8
+    },
+    {
+      "tag": "Portal Detection and Suppression Profile",
+      "count": 8
+    },
+    {
+      "tag": "Precedence Profile",
+      "count": 7
+    },
+    {
+      "tag": "Query With Filter",
+      "count": 1
+    },
+    {
+      "tag": "Real Time Location Service Profile",
+      "count": 5
+    },
+    {
+      "tag": "Restricted AP Access Profile",
+      "count": 7
+    },
+    {
+      "tag": "Rogue Classification Policy",
+      "count": 6
+    },
+    {
+      "tag": "Rogue Client",
+      "count": 1
+    },
+    {
+      "tag": "Ruckus Wireless AP Zone",
+      "count": 39
+    },
+    {
+      "tag": "RuckusGRE Tunnel Profile",
+      "count": 7
+    },
+    {
+      "tag": "SCG User",
+      "count": 6
+    },
+    {
+      "tag": "SCG User Group",
+      "count": 9
+    },
+    {
+      "tag": "SCI",
+      "count": 9
+    },
+    {
+      "tag": "Service Ticket",
+      "count": 2
+    },
+    {
+      "tag": "Session Management",
+      "count": 1
+    },
+    {
+      "tag": "Signature Based Profile",
+      "count": 6
+    },
+    {
+      "tag": "SMS Gateway",
+      "count": 3
+    },
+    {
+      "tag": "SNMP Agent",
+      "count": 2
+    },
+    {
+      "tag": "Social Media Login Profile",
+      "count": 6
+    },
+    {
+      "tag": "SoftGRE Tunnel Profile",
+      "count": 7
+    },
+    {
+      "tag": "Split Tunnel Profile",
+      "count": 8
+    },
+    {
+      "tag": "Switch Event Management Setting",
+      "count": 4
+    },
+    {
+      "tag": "Syslog Server",
+      "count": 5
+    },
+    {
+      "tag": "System",
+      "count": 27
+    },
+    {
+      "tag": "SystemIPsec",
+      "count": 2
+    },
+    {
+      "tag": "Test AAA Server",
+      "count": 1
+    },
+    {
+      "tag": "Traffic Class Profile",
+      "count": 7
+    },
+    {
+      "tag": "URL Filtering Policy",
+      "count": 9
+    },
+    {
+      "tag": "User Traffic Profile",
+      "count": 10
+    },
+    {
+      "tag": "VDP Profile",
+      "count": 4
+    },
+    {
+      "tag": "Vendor Specific Attribute Profile",
+      "count": 7
+    },
+    {
+      "tag": "VLAN Name Profile",
+      "count": 6
+    },
+    {
+      "tag": "VlanPooling",
+      "count": 7
+    },
+    {
+      "tag": "Web Authentication",
+      "count": 7
+    },
+    {
+      "tag": "Wechat",
+      "count": 6
+    },
+    {
+      "tag": "Wi-Fi Calling Policy",
+      "count": 8
+    },
+    {
+      "tag": "Wired Client",
+      "count": 3
+    },
+    {
+      "tag": "Wireless Client",
+      "count": 8
+    },
+    {
+      "tag": "WLAN",
+      "count": 26
+    },
+    {
+      "tag": "WLAN Group",
+      "count": 11
+    },
+    {
+      "tag": "WLAN Scheduler",
+      "count": 6
+    },
+    {
+      "tag": "ZDImport",
+      "count": 4
+    },
+    {
+      "tag": "Zone AAA",
+      "count": 21
+    },
+    {
+      "tag": "Zone Schedule Upgrade",
+      "count": 7
+    },
+    {
+      "tag": "Zone Switch Group Link",
+      "count": 5
+    }
+  ]
+}
