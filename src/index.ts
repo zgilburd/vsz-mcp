@@ -2,13 +2,11 @@
 /**
  * vSZ MCP Server Entry Point
  *
- * Loads configuration from environment variables, creates the MCP server,
- * connects via stdio transport, and handles graceful shutdown.
+ * Reads configuration from environment variables (injected by the MCP host),
+ * creates the MCP server, connects via stdio transport, and handles graceful shutdown.
  *
  * Source: docs/mcp-architecture.md, Section 11
  */
-
-import 'dotenv/config';
 
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { loadConfigFromEnv, resolveConfig } from './types/config.js';

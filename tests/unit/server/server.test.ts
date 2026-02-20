@@ -3,7 +3,7 @@
  *
  * Mocks the auth manager and HTTP client to verify:
  * - McpServer is created with correct name and version
- * - AuthManager.login() is called during creation
+ * - AuthManager.login() is NOT called during creation (lazy auth)
  * - Cleanup function calls AuthManager.logout()
  * - Graceful degradation when tool/resource registries don't exist
  */
@@ -63,11 +63,11 @@ describe('createServer', () => {
     expect(typeof cleanup).toBe('function');
   });
 
-  it('calls authManager.login() during creation', async () => {
+  it('does not call authManager.login() during creation (lazy auth)', async () => {
     const config = makeConfig();
     await createServer(config);
 
-    expect(mockLogin).toHaveBeenCalledOnce();
+    expect(mockLogin).not.toHaveBeenCalled();
   });
 
   it('cleanup calls authManager.logout()', async () => {

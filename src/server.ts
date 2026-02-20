@@ -79,8 +79,9 @@ export async function createServer(
   );
 
   // --- Auth ---
+  // Skip login at startup — the HTTP client triggers lazy login on first request.
+  // This avoids stderr output that can confuse MCP hosts into thinking the server failed.
   const authManager: AuthManager = createAuthManager(config);
-  await authManager.login();
 
   // --- HTTP Client ---
   const httpClient = new VszHttpClient(config, authManager);

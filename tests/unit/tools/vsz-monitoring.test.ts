@@ -82,4 +82,18 @@ describe('vsz_monitoring tool', () => {
 
     expect(mock.get).toHaveBeenCalledWith('/profiles/utp', undefined);
   });
+
+  it('should send empty body {} for POST when no data provided', async () => {
+    mock.post.mockResolvedValue({ list: [], totalCount: 0 });
+    await tool.handler({ action: 'list_alarms' });
+
+    expect(mock.post).toHaveBeenCalledWith('/alert/alarm/list', {});
+  });
+
+  it('should forward data fields as GET query params', async () => {
+    mock.get.mockResolvedValue({ list: [], totalCount: 0 });
+    await tool.handler({ action: 'list_user_traffic_profiles', data: { domainId: 'dom-1' } });
+
+    expect(mock.get).toHaveBeenCalledWith('/profiles/utp', { domainId: 'dom-1' });
+  });
 });

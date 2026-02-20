@@ -17,7 +17,7 @@ const actions: Record<string, ActionDefinition> = {
   list_maps: {
     method: 'GET',
     path: '/maps',
-    description: 'List indoor maps.',
+    description: 'List indoor maps. Requires data: {groupId: "<zoneId>", groupType: "ZONE"}.',
   },
   create_map: {
     method: 'POST',

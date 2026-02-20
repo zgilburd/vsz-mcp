@@ -244,11 +244,15 @@ export function createDomainTool(
         const sendsBody =
           actionDef.hasBody ?? (method === 'POST' || method === 'PUT' || method === 'PATCH');
 
-        // Build query params for paginated GET lists
+        // Build query params for GET requests (pagination + data fields as query params)
         const params: Record<string, string | number> | undefined =
-          actionDef.paginatable && method === 'GET'
-            ? buildPaginationParams(input)
-            : undefined;
+          method === 'GET' ? buildGetParams(input, actionDef.paginatable ?? false) : undefined;
+
+        // POST always needs a JSON body (vSZ rejects bodyless POST with 400).
+        // PUT/PATCH forward data as-is (some actions like ack_alarm send no body).
+        const body = sendsBody
+          ? (method === 'POST' ? (input.data ?? {}) : input.data)
+          : undefined;
 
         let result: unknown;
 
@@ -257,13 +261,13 @@ export function createDomainTool(
             result = await httpClient.get(path, params);
             break;
           case 'POST':
-            result = await httpClient.post(path, sendsBody ? input.data : undefined);
+            result = await httpClient.post(path, body);
             break;
           case 'PUT':
-            result = await httpClient.put(path, sendsBody ? input.data : undefined);
+            result = await httpClient.put(path, body);
             break;
           case 'PATCH':
-            result = await httpClient.patch(path, sendsBody ? input.data : undefined);
+            result = await httpClient.patch(path, body);
             break;
           case 'DELETE':
             result = await httpClient.delete(path);
@@ -280,24 +284,39 @@ export function createDomainTool(
 }
 
 /**
- * Build GET list pagination query params from tool input.
+ * Build GET query params from tool input.
+ *
+ * Merges three sources:
+ * 1. Pagination params (index/listSize) when paginatable is true
+ * 2. Any `data` fields forwarded as query params (for endpoints needing groupId, etc.)
  *
  * vSZ GET lists use 0-based index and listSize.
  * Source: docs/api-patterns-analysis.md, Section 4
  */
-function buildPaginationParams(
+function buildGetParams(
   input: ToolInput,
+  paginatable: boolean,
 ): Record<string, string | number> | undefined {
-  if (input.page === undefined && input.limit === undefined) {
-    return undefined;
+  const params: Record<string, string | number> = {};
+
+  // Pagination
+  if (paginatable) {
+    if (input.page !== undefined) {
+      params.index = input.page;
+    }
+    if (input.limit !== undefined) {
+      params.listSize = input.limit;
+    }
   }
 
-  const params: Record<string, string | number> = {};
-  if (input.page !== undefined) {
-    params.index = input.page;
+  // Forward data fields as query params for GET requests
+  if (input.data) {
+    for (const [key, value] of Object.entries(input.data)) {
+      if (typeof value === 'string' || typeof value === 'number') {
+        params[key] = value;
+      }
+    }
   }
-  if (input.limit !== undefined) {
-    params.listSize = input.limit;
-  }
-  return params;
+
+  return Object.keys(params).length > 0 ? params : undefined;
 }

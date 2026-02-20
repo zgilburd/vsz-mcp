@@ -81,6 +81,11 @@ export class VszHttpClient {
    * - HTTP 503 or Ruckus error 150/151 (cluster unavailable): retry up to 3 times with 5s delay
    */
   private async request<T>(opts: HttpRequestOptions): Promise<T> {
+    // Lazy login: if startup auth failed or token expired, authenticate now
+    if (!this.authManager.isAuthenticated()) {
+      await this.authManager.login();
+    }
+
     let lastError: VszHttpError | undefined;
     let retriesLeft = MAX_RETRIES;
     let hasReauthed = false;
