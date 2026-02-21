@@ -32,6 +32,9 @@
 
 ## Gotchas
 
+- **ESLint 10 flat config**: Project uses `eslint@^10` which requires `eslint.config.js` (no `.eslintrc.*`). TypeScript parsing needs `typescript-eslint` (unified package). Config lives at project root.
+- **npm `files` overrides `.gitignore`**: `dist/` is gitignored but listed in `package.json#files`, so it IS included in published packages. Don't remove it from `files`.
+- **npm trusted publishers require existing package**: Can't configure OIDC trusted publishing on npmjs.com until the package has been published at least once (via NPM_TOKEN bootstrap). After first publish, go to `npmjs.com/package/vsz-mcp/access`.
 - **MCP sibling cascade**: Resource handler exceptions propagate to the SDK transport and fail ALL in-flight sibling requests. Resource handlers registered in `registerResources()` are wrapped in try/catch returning `{ contents: [{ uri, mimeType: 'application/json', text: JSON.stringify({ error }) }] }` — never let them throw.
 - **Tool vs resource error shapes**: Tools return `{ isError: true, content: [...] }`; resource errors go in `contents[].text` as JSON. Different MCP result shapes for the same concept.
 - **Login deduplication re-auth caveat**: `ensureAuthenticated()` short-circuits on `isAuthenticated() === true`. For 401 re-auth, call `authManager.login()` directly — the session is known-expired so the guard would give a false positive.
