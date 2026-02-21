@@ -184,7 +184,7 @@ function resolvePath(template: string, input: ToolInput): string {
  */
 function successResult(data: unknown): ToolResult {
   return {
-    content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+    content: [{ type: 'text', text: data !== undefined ? JSON.stringify(data, null, 2) : 'OK' }],
   };
 }
 
