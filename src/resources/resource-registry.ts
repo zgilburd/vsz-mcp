@@ -69,7 +69,14 @@ export function registerResources(server: McpServer, httpClient: VszHttpClient):
         def.name,
         def.uri,
         { description: def.metadata.description, mimeType: def.metadata.mimeType },
-        async (uri) => def.readHandler(uri),
+        async (uri) => {
+          try {
+            return await def.readHandler(uri);
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
+            return { contents: [{ uri: uri.toString(), mimeType: 'application/json', text: JSON.stringify({ error: msg }) }] };
+          }
+        },
       );
     } else {
       const template = new ResourceTemplate(
@@ -80,7 +87,14 @@ export function registerResources(server: McpServer, httpClient: VszHttpClient):
         def.name,
         template,
         { description: def.metadata.description, mimeType: def.metadata.mimeType },
-        async (uri, variables) => def.readTemplateHandler(uri, variables),
+        async (uri, variables) => {
+          try {
+            return await def.readTemplateHandler(uri, variables);
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
+            return { contents: [{ uri: uri.toString(), mimeType: 'application/json', text: JSON.stringify({ error: msg }) }] };
+          }
+        },
       );
     }
   }

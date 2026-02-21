@@ -43,6 +43,7 @@ const MAX_RETRIES = 3;
 export class VszHttpClient {
   private readonly baseUrl: string;
   private readonly rejectUnauthorized: boolean;
+  private loginInProgress: Promise<void> | null = null;
 
   constructor(
     config: Required<VszMcpConfig>,
@@ -51,6 +52,16 @@ export class VszHttpClient {
     const editionDefaults = EDITION_DEFAULTS[config.edition];
     this.baseUrl = `https://${config.host}:${config.port}${editionDefaults.basePath}/${config.apiVersion}`;
     this.rejectUnauthorized = config.tlsRejectUnauthorized;
+  }
+
+  private async ensureAuthenticated(): Promise<void> {
+    if (this.authManager.isAuthenticated()) return;
+    if (!this.loginInProgress) {
+      this.loginInProgress = this.authManager.login().finally(() => {
+        this.loginInProgress = null;
+      });
+    }
+    await this.loginInProgress;
   }
 
   async get<T>(path: string, params?: Record<string, string | number>): Promise<T> {
@@ -82,9 +93,7 @@ export class VszHttpClient {
    */
   private async request<T>(opts: HttpRequestOptions): Promise<T> {
     // Lazy login: if startup auth failed or token expired, authenticate now
-    if (!this.authManager.isAuthenticated()) {
-      await this.authManager.login();
-    }
+    await this.ensureAuthenticated();
 
     let lastError: VszHttpError | undefined;
     let retriesLeft = MAX_RETRIES;
@@ -102,6 +111,7 @@ export class VszHttpClient {
           err.statusCode === 401 || isSessionExpiredError(err.vszError.code);
         if (isSessionExpired && !hasReauthed) {
           hasReauthed = true;
+          this.loginInProgress = null; // Clear stale promise so future requests re-login
           await this.authManager.login();
           continue;
         }
