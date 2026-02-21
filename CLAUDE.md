@@ -30,6 +30,12 @@
 - Use event sourcing for state changes
 - Ensure input validation at system boundaries
 
+## Gotchas
+
+- **MCP sibling cascade**: Resource handler exceptions propagate to the SDK transport and fail ALL in-flight sibling requests. Resource handlers registered in `registerResources()` are wrapped in try/catch returning `{ contents: [{ uri, mimeType: 'application/json', text: JSON.stringify({ error }) }] }` — never let them throw.
+- **Tool vs resource error shapes**: Tools return `{ isError: true, content: [...] }`; resource errors go in `contents[].text` as JSON. Different MCP result shapes for the same concept.
+- **Login deduplication re-auth caveat**: `ensureAuthenticated()` short-circuits on `isAuthenticated() === true`. For 401 re-auth, call `authManager.login()` directly — the session is known-expired so the guard would give a false positive.
+
 ### Project Config
 
 - **Topology**: hierarchical-mesh
