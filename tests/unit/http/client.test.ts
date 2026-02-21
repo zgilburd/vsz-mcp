@@ -145,6 +145,37 @@ describe('VszHttpClient', () => {
     });
   });
 
+  describe('concurrent login deduplication', () => {
+    it('should call login() exactly once when multiple requests arrive unauthenticated', async () => {
+      // Set up a client where isAuthenticated() starts false, then returns true after login
+      let authenticated = false;
+      const dedupAuthManager = createMockAuthManager({
+        isAuthenticated: vi.fn(() => authenticated),
+        login: vi.fn().mockImplementation(async () => {
+          // Simulate async login
+          await Promise.resolve();
+          authenticated = true;
+        }),
+      });
+      const dedupClient = new VszHttpClient(config, dedupAuthManager);
+
+      // Set up two concurrent HTTP responses
+      mockHttpsResponse(200, { a: 1 });
+      mockHttpsResponse(200, { b: 2 });
+
+      // Fire two concurrent requests while unauthenticated
+      const [r1, r2] = await Promise.all([
+        dedupClient.get('/path-a'),
+        dedupClient.get('/path-b'),
+      ]);
+
+      expect(r1).toEqual({ a: 1 });
+      expect(r2).toEqual({ b: 2 });
+      // login() must have been called exactly once, not twice
+      expect(dedupAuthManager.login).toHaveBeenCalledOnce();
+    });
+  });
+
   describe('auth injection', () => {
     it('should call applyAuth before every request', async () => {
       mockHttpsResponse(200, {});

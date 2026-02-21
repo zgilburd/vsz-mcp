@@ -309,4 +309,46 @@ describe('Resource Registry', () => {
     const mod = await import('../../../src/resources/resource-registry.js');
     expect(typeof mod.registerResources).toBe('function');
   });
+
+  it('should return error content when a static handler throws, not propagate to SDK', async () => {
+    const { registerResources } = await import('../../../src/resources/resource-registry.js');
+
+    // Capture the registered handler for vsz-system-summary
+    let capturedHandler: ((uri: URL) => Promise<unknown>) | undefined;
+    const mockServer = {
+      resource: vi.fn((_name: string, _uri: unknown, _meta: unknown, handler: (uri: URL) => Promise<unknown>) => {
+        if (_name === 'vsz-system-summary') capturedHandler = handler;
+      }),
+    };
+
+    const errorClient = { ...createMockHttpClient(), get: vi.fn().mockRejectedValue(new Error('Network failure')) };
+    registerResources(mockServer as never, errorClient as never);
+
+    expect(capturedHandler).toBeDefined();
+    const result = await capturedHandler!(new URL('vsz://system/summary')) as { contents: Array<{ text: string }> };
+    expect(result.contents).toHaveLength(1);
+    const parsed = JSON.parse(result.contents[0].text);
+    expect(parsed.error).toBe('Network failure');
+  });
+
+  it('should return error content when a template handler throws, not propagate to SDK', async () => {
+    const { registerResources } = await import('../../../src/resources/resource-registry.js');
+
+    // Capture the registered handler for vsz-domain-by-id (template resource)
+    let capturedHandler: ((uri: URL, vars: Record<string, string>) => Promise<unknown>) | undefined;
+    const mockServer = {
+      resource: vi.fn((_name: string, _tpl: unknown, _meta: unknown, handler: (uri: URL, vars: Record<string, string>) => Promise<unknown>) => {
+        if (_name === 'vsz-domain-by-id') capturedHandler = handler;
+      }),
+    };
+
+    const errorClient = { ...createMockHttpClient(), get: vi.fn().mockRejectedValue(new Error('Auth failed')) };
+    registerResources(mockServer as never, errorClient as never);
+
+    expect(capturedHandler).toBeDefined();
+    const result = await capturedHandler!(new URL('vsz://domains/d1'), { domainId: 'd1' }) as { contents: Array<{ text: string }> };
+    expect(result.contents).toHaveLength(1);
+    const parsed = JSON.parse(result.contents[0].text);
+    expect(parsed.error).toBe('Auth failed');
+  });
 });
